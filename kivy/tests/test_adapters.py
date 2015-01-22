@@ -197,7 +197,8 @@ for fruit_record in fruit_data_list_of_dicts:
             dict({'name': fruit_record['name'],
                   'Serving Size': fruit_record['Serving Size'],
                   'is_selected': fruit_record['is_selected']},
-            **dict(list(zip(list(attributes_and_units.keys()), fruit_record['data']))))
+            **dict(list(zip(list(attributes_and_units.keys()),
+                            fruit_record['data']))))
 
 
 class CategoryItem(SelectableDataItem):
@@ -440,6 +441,20 @@ class AdaptersTestCase(unittest.TestCase):
 
         msg = 'list adapter: data must be a tuple or list'
         self.assertEqual(str(cm.exception), msg)
+
+    def test_simple_list_adapter_for_inherited_list(self):
+        # Test for issue 1396 : list, tuple and inheritance
+        class ExtendedList(list):
+            pass
+
+        class ExtendedTuple(tuple):
+            pass
+
+        # Equivalent to assertNotRaise
+        simple_list_adapter = SimpleListAdapter(data=ExtendedList(),
+                                  template='CustomSimpleListItem')
+        simple_list_adapter = SimpleListAdapter(data=ExtendedTuple(),
+                                  template='CustomSimpleListItem')
 
     def test_simple_list_adapter_with_template(self):
         list_item_args_converter = \
@@ -1159,8 +1174,9 @@ class AdaptersTestCase(unittest.TestCase):
         cat_dog_data = {'cat': {'text': 'cat', 'is_selected': False},
                         'dog': {'text': 'dog', 'is_selected': False}}
         dict_adapter.data = cat_dog_data
-        # sorted_keys should remain ['dog'], as it still matches data.
-        self.assertEqual(dict_adapter.sorted_keys, ['dog'])
+        # new data added, sorted_keys are updated with new entries
+        self.assertIn(dict_adapter.sorted_keys,
+                (['dog', 'cat'], ['cat', 'dog']))
         dict_adapter.sorted_keys = ['cat']
         self.assertEqual(pet_listener.current_pet, ['cat'])
 

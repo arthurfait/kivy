@@ -3,7 +3,8 @@ Compatibility module for Python 2.7 and > 3.3
 =============================================
 '''
 
-__all__ = ('PY2', 'string_types', 'queue', 'iterkeys', 'itervalues', 'iteritems')
+__all__ = ('PY2', 'string_types', 'queue', 'iterkeys',
+           'itervalues', 'iteritems')
 
 import sys
 try:
@@ -22,6 +23,12 @@ if PY2:
     text_type = unicode
 else:
     string_types = text_type = str
+
+#: unichr is just chr in py3, since all strings are unicode
+if PY2:
+    unichr = unichr
+else:
+    unichr = chr
 
 if PY2:
     iterkeys = lambda d: d.iterkeys()

@@ -11,6 +11,7 @@ from kivy.core.window import WindowBase
 from kivy.base import EventLoop
 from kivy.lib.vidcore_lite import bcm, egl
 
+
 class WindowEglRpi(WindowBase):
 
     def create_window(self):
@@ -43,6 +44,7 @@ class WindowEglRpi(WindowBase):
             c.EGL_BLUE_SIZE, 8,
             c.EGL_ALPHA_SIZE, 8,
             c.EGL_DEPTH_SIZE, 16,
+            c.EGL_STENCIL_SIZE, 8,
             c.EGL_SURFACE_TYPE, c.EGL_WINDOW_BIT,
             c.EGL_NONE]
 
@@ -60,13 +62,12 @@ class WindowEglRpi(WindowBase):
         self.egl_info = (display, surface, context)
         egl.MakeCurrent(display, surface, surface, context)
 
-    
     def close(self):
         egl.Terminate(self.egl_info[0])
-    
+
     def flip(self):
         egl.SwapBuffers(self.egl_info[0], self.egl_info[1])
-    
+
     def _mainloop(self):
         EventLoop.idle()
 

@@ -2,8 +2,8 @@
 Float Layout
 ============
 
-The :class:`FloatLayout` class will only honor the :data:`Widget.pos_hint` and
-:data:`Widget.size_hint` attributes.
+The :class:`FloatLayout` class honors only the :attr:`Widget.pos_hint` and
+:attr:`Widget.size_hint` attributes.
 
 .. only:: html
 
@@ -15,18 +15,18 @@ The :class:`FloatLayout` class will only honor the :data:`Widget.pos_hint` and
     .. image:: images/floatlayout.png
         :align: right
 
-For example, if you create a FloatLayout with size a of (300, 300)::
+For example, a FloatLayout with a size of (300, 300) is created::
 
     layout = FloatLayout(size=(300, 300))
 
-By default, all widgets have size_hint=(1, 1), so this button will have the
-same size as the layout::
+By default, all widgets have their size_hint=(1, 1), so this button will adopt
+the same size as the layout::
 
     button = Button(text='Hello world')
     layout.add_widget(button)
 
-To create a button of 50% width and 25% height of the layout and positioned at
-(20, 20), you can do::
+To create a button 50% of the width and 25% of the height of the layout and
+positioned at (20, 20), you can do::
 
     button = Button(
         text='Hello world',
@@ -41,13 +41,13 @@ If you want to create a button that will always be the size of layout minus
 
 .. note::
 
-    This layout can be used for an application. Most of time, you will
+    This layout can be used for an application. Most of the time, you will
     use the size of Window.
 
 .. warning::
 
-    If you are not using pos_hint, you must handle the position of
-    children: If the float layout is moving, you must handle moving
+    If you are not using pos_hint, you must handle the positioning of the
+    children: if the float layout is moving, you must handle moving the
     children too.
 
 '''

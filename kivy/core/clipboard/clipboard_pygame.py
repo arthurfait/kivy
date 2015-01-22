@@ -5,9 +5,10 @@ Clipboard Pygame: an implementation of the Clipboard using pygame.scrap.
 __all__ = ('ClipboardPygame', )
 
 from kivy.utils import platform
+from kivy.compat import PY2
 from kivy.core.clipboard import ClipboardBase
 
-if platform() not in ('win', 'linux', 'macosx'):
+if platform not in ('win', 'linux', 'macosx'):
     raise SystemError('unsupported platform for pygame clipboard')
 
 try:
@@ -29,14 +30,18 @@ class ClipboardPygame(ClipboardBase):
 
     def get(self, mimetype='text/plain'):
         self.init()
-        return pygame.scrap.get(mimetype)
+        text = pygame.scrap.get(mimetype)
+        if PY2:
+            text = text.encode('utf-8')
+        return text
 
     def put(self, data, mimetype='text/plain'):
         self.init()
-        if platform() == 'macosx' and data.endswith('\x00'):
+        if platform == 'macosx' and data.endswith('\x00'):
             data = data[:-1]
         pygame.scrap.put(mimetype, data)
 
     def get_types(self):
         self.init()
         return pygame.scrap.get_types()
+
